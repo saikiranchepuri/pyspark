@@ -64,9 +64,10 @@ sc = SparkContext(master="local",appName="pyspark1")
 print(sc.textFile("D:\\test.txt").first())
 file = sc.textFile("D:\\test.txt")
 words = file.flatMap(lambda x: x.split(" ")).map(lambda w: (w,1)).reduceByKey(lambda x,y: x+y)
-words.foreach(print)
+revwords = words.map(lambda x: (x[1],x[0])).sortByKey(True) 
+revwords.foreach(print)
 
-# words.saveAsTextFile("D:\\File\\") // This will run only if winutils is correctly integrated in windows machine.
+# revwords.saveAsTextFile("D:\\File\\") // This will run only if winutils is correctly integrated in windows machine.
 // winutils is to support hdfs system in windows machine.
 
 
