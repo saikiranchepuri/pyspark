@@ -1,0 +1,76 @@
+This file describes pyspark installation in pycharm on Windows 10 OS.
+=============================================================================
+
+Prerequisites:
+1) PyCharm
+2) Python
+3) Spark 
+4) Java
+
+Download python v3.8 from www.python.org and install in windows
+Set up Environment variable --> under System variables --> Path --> New --> C:\Python38
+After installing validate python is installed/not by going thru:
+cd:\>C:\Users\saikiran\AppData\Local\Programs\Python\Python38 
+cd:\>python38
+
+It goes to python shell if it is successful.
+
+Along with this, pip (python package) also included.
+With this, we can install "pyspark" env in our system so that we can run spark related programs. But this is temporary.
+cd:\>C:\Users\saikiran\AppData\Local\Programs\Python\Python38
+cd:\>pip install pyspark
+
+Download PyCharm
+
+Validate python by running python scripts in PyCharm.
+
+Download Spark from official website with .tgz file extension
+Extract it with 7z to un-compress tar ball on Windows machine.
+
+Place the spark folder in C directory as:
+C:\\Spark3
+
+Run cmd line on Spark3\bin folder with pyspark for opening spark shell.
+Spark shell will open and will run successfully. Note, this is also temporary for running spark related programs.
+
+Set up Java path in Windows machine.
+
+Now, setting up pyspark env variable in Windows for permanent run of spark programs
+System Variables --> New --> Name: SPARK_HOME val: C:\\Spark3
+System Variables --> Path --> Edit --> %SPARK_HOME%\bin
+
+Now open command line and run pyspark. This will open spark shell
+
+Also, we need to set up WinUtils to avoid platform erros.
+Download WinUtils
+Create a directory and place the file over there.
+
+Now, set up Environment variable for winutils.
+System Variables --> New --> Name: HADOOP_HOME val: C:\\hadoop
+System Variables --> Path --> $HADOOP_HOME%\bin
+
+Finally, Now integrate Pyspark in PyCharm
+File --> Settings --> Project Structure --> Add Content Root
+1) Go to C:\\Spark3 and select Python folder
+2) Go to C:\\Spark3\\Python\\lib and select py4j-0.10.8.1-src
+
+These two are essential for running pyspark in Pycharm
+
+Now, run Word Count program in PyCharm
+
+from pyspark import SparkConf,SparkContext
+
+sc = SparkContext(master="local",appName="pyspark1")
+print(sc.textFile("D:\\test.txt").first())
+file = sc.textFile("D:\\test.txt")
+words = file.flatMap(lambda x: x.split(" ")).map(lambda w: (w,1)).reduceByKey(lambda x,y: x+y)
+words.foreach(print)
+
+# words.saveAsTextFile("D:\\File\\") // This will run only if winutils is correctly integrated in windows machine.
+// winutils is to support hdfs system in windows machine.
+
+
+References:
+1) https://www.itversity.com/setup-spark-development-environment-pycharm-and-python/ 
+2) https://intellipaat.com/community/7191/how-to-link-pycharm-with-pyspark
+
